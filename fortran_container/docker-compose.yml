@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    myfortran:
+        build: .
+        container_name: myfortran
+        volumes: 
+            - C:/Users:/mnt/windows
+        environment: 
+            DISPLAY: 192.168.56.1:0.0
