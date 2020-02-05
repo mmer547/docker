@@ -33,7 +33,7 @@ RUN apt install -y intel-mkl-2019.0-045
 ###
 RUN apt install -y curl gdebi
 RUN curl -L https://go.microsoft.com/fwlink/?LinkID=760868 -o vscode.deb
-RUN apt install -y ./vscode.deb
+RUN yes | gdebi ./vscode.deb
 # Install others
 RUN apt install -y x11-apps
 RUN apt install -y libx11-xcb-dev
