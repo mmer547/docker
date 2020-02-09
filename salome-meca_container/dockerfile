@@ -1,0 +1,11 @@
+FROM ubuntu:18.04
+RUN apt update -y && apt-get install -y wget
+RUN apt install -y gcc g++ gfortran cmake python python-dev python-numpy python-qt4 tk bison flex liblapack-dev libblas-dev libopenblas-dev zlib1g-dev
+# RUN tar zxvf SALOME-MECA-2016-LGPL-1.tgz
+# RUN SMECA_V2016_LGPL.run
+ARG DOCKER_UID=1000
+ARG DOCKER_USER=user
+ARG DOCKER_PASSWORD=pass
+RUN useradd -m --uid ${DOCKER_UID} --groups root ${DOCKER_USER} \
+  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
+USER ${DOCKER_USER}
