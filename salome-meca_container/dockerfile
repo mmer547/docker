@@ -20,6 +20,6 @@ RUN useradd -m --uid ${DOCKER_UID} --groups root ${DOCKER_USER} \
   && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 COPY salome_meca-2019.0.3-1-universal.tgz /tmp/
 RUN tar zxvf /tmp/salome_meca-2019.0.3-1-universal.tgz -C /tmp/
-# RUN /tmp/salome_meca-2019.0.3-1-universal.run -f -q -t /home/mmer547/salome_meca -l English
-# RUN rm -rf /tmp/salome_meca-2019.0.3-1-universal.tgz salome_meca-2019.0.3-1-universal.run
-# USER ${DOCKER_USER}
+RUN /tmp/salome_meca-2019.0.3-1-universal.run -f -q -t /home/mmer547/salome_meca -l English
+RUN rm -rf /tmp/salome_meca-2019.0.3-1-universal.tgz /tmp/salome_meca-2019.0.3-1-universal.run
+USER ${DOCKER_USER}
