@@ -20,11 +20,22 @@ RUN yes | gdebi ./vscode.deb
 RUN apt install -y x11-apps
 RUN apt install -y libx11-xcb-dev
 RUN apt install -y libasound2
-RUN apt install -y openmpi-doc openmpi-bin libopenmpi-dev
-# Copy extension
-COPY ekibun.fortranbreaker-0.0.4.vsix /tmp/
-COPY hansec.fortran-ls-0.6.0.vsix /tmp/
-COPY krvajalm.linter-gfortran-2.1.1.vsix /tmp/
+# Wget extension
+ARG publisher=krvajalm
+ARG extensionname=linter-gfortran
+ARG version=2.1.1
+RUN wget https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${extensionname}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage -P /tmp
+RUN mv /tmp/Microsoft.VisualStudio.Services.VSIXPackage /tmp/krvajalm.linter-gfortran
+ARG publisher=hansec
+ARG extensionname=fortran-ls
+ARG version=0.6.0
+RUN wget https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${extensionname}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage -P /tmp
+RUN mv /tmp/Microsoft.VisualStudio.Services.VSIXPackage /tmp/hansec.fortran-ls
+ARG publisher=ekibun
+ARG extensionname=fortranbreaker
+ARG version=0.0.4
+RUN wget https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${extensionname}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage -P /tmp
+RUN mv /tmp/Microsoft.VisualStudio.Services.VSIXPackage /tmp/ekibun.fortranbreaker
 # Create User
 ARG DOCKER_UID=1000
 ARG DOCKER_USER=user
@@ -32,8 +43,10 @@ ARG DOCKER_PASSWORD=pass
 RUN useradd -m --uid ${DOCKER_UID} --groups root ${DOCKER_USER} \
   && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 USER ${DOCKER_USER}
-WORKDIR /home/${DOCKER_USER}
 # Install extension
-RUN code --install-extension /tmp/hansec.fortran-ls-0.6.0.vsix
-RUN code --install-extension /tmp/krvajalm.linter-gfortran-2.1.1.vsix
-RUN code --install-extension /tmp/ekibun.fortranbreaker-0.0.4.vsix
+WORKDIR /tmp
+RUN code --install-extension krvajalm.linter-gfortran
+RUN code --install-extension hansec.fortran-ls
+RUN code --install-extension ekibun.fortranbreaker
+# Set starting directory
+WORKDIR /mnt/windows/
