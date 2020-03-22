@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    mysalomemeca:
+        build: .
+        container_name: mysalomemeca
+        volumes: 
+            - C:/Users:/mnt/windows
+        environment: 
+            DISPLAY: 192.168.56.1:0.0
