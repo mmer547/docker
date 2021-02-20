@@ -13,9 +13,14 @@ RUN wget https://apt.repos.intel.com/setup/intelproducts.list -O /etc/apt/source
 RUN apt update -y
 RUN apt install -y intel-mkl-2019.0-045
 # Install code
-RUN apt install -y curl gdebi
-RUN curl -L https://go.microsoft.com/fwlink/?LinkID=760868 -o vscode.deb
-RUN yes | gdebi ./vscode.deb
+RUN apt install -y curl
+#
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+RUN install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+RUN apt install -y apt-transport-https
+RUN apt update
+RUN apt install -y code
 # Install others
 RUN apt install -y x11-apps
 RUN apt install -y libx11-xcb-dev
@@ -45,8 +50,8 @@ RUN useradd -m --uid ${DOCKER_UID} --groups root ${DOCKER_USER} \
 USER ${DOCKER_USER}
 # Install extension
 WORKDIR /tmp
-RUN code --install-extension krvajalm.linter-gfortran
-RUN code --install-extension hansec.fortran-ls
-RUN code --install-extension ekibun.fortranbreaker
-# Set starting directory
-WORKDIR /mnt/windows/
+# RUN code --force --install-extension krvajalm.linter-gfortran
+# RUN code --force --install-extension hansec.fortran-ls
+# RUN code --force --install-extension ekibun.fortranbreaker
+# # Set starting directory
+# WORKDIR /mnt/windows/
